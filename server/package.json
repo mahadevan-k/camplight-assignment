@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "@types/express": "^4.17.21",
+    "express": "^4.19.2",
+    "libphonenumber-js": "^1.11.2",
+    "typescript": "^5.4.5"
+  },
+  "name": "camplight-server",
+  "version": "1.0.0",
+  "description": "Camplight user listing assignment with real-time updates",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahadevan-k/camplight-assignment.git"
+  },
+  "keywords": [
+    "camplight",
+    "user",
+    "assignment"
+  ],
+  "author": "Mahadevan K",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mahadevan-k/camplight-assignment/issues"
+  },
+  "homepage": "https://github.com/mahadevan-k/camplight-assignment#readme",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "prisma": "^5.14.0"
+  }
+}
