@@ -13,7 +13,8 @@
   "description": "Camplight user listing assignment with real-time updates",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
