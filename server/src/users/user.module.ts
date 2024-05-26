@@ -1,6 +1,6 @@
-import UserController from './user.controller.ts';
-import UserService from './user.service.ts';
-import UserRouter from './user.router.ts';
+import UserController from './user.controller';
+import UserService from './user.service';
+import UserRouter from './user.router';
 
 const userService = new UserService();
 const userController = new UserController(userService);

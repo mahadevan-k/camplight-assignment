@@ -15,7 +15,11 @@ class UserService {
   }
 
   //TODO: remove hardcoding of limit and offset
-  getUsers = (limit:number=20, offset:number=1) => this.prisma.user.findMany({take: limit, skip: offset});
+  getUsers = (page:number=1, page_size:number=20) => {
+    return {
+      users: this.prisma.user.findMany({take: page_size, skip: (page-1)*page_size})
+    }
+  }
 
   addUser = async (userData: UserData) => {
     const { name, email, phone } = userData;
@@ -54,10 +58,10 @@ class UserService {
           }
         });
 
-        return newUser;
+        return {"user": newUser};
       }
     } catch(error:unknown) {
-      console.log("users/addUser: "+error.message);
+      console.log("users/addUser: "+(error as Error).message);
       // are there any duplicate records?
       if(error instanceof Prisma.PrismaClientKnownRequestError && error.code == "P2002") {
         errors["general"].push("A user with the same name, email or phone number already exists");
@@ -81,7 +85,7 @@ class UserService {
     if(record)
       await this.prisma.user.delete({where: {id}});
 
-    return record ? undefined : {"errors": { "general": ["user not found"]};
+    return record ? undefined : {"errors": { "general": ["user not found"]}};
   }
 }
 
