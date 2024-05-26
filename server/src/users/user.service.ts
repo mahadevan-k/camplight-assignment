@@ -15,9 +15,9 @@ class UserService {
   }
 
   //TODO: remove hardcoding of limit and offset
-  getUsers = (page:number=1, page_size:number=20) => {
+  getUsers = async (page:number=1, page_size:number=20) => {
     return {
-      users: this.prisma.user.findMany({take: page_size, skip: (page-1)*page_size})
+      users: await this.prisma.user.findMany({take: page_size, skip: (page-1)*page_size})
     }
   }
 
