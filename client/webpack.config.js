@@ -32,6 +32,9 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
+    client: {
+      overlay: false,
+    },
     compress: true,
     port: 9000,
   },

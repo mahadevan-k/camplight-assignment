@@ -17,7 +17,8 @@ class UserService {
   //TODO: remove hardcoding of limit and offset
   getUsers = async (page:number=1, page_size:number=20) => {
     return {
-      users: await this.prisma.user.findMany({take: page_size, skip: (page-1)*page_size})
+      users: await this.prisma.user.findMany({take: page_size, skip: (page-1)*page_size}),
+      pages: Math.trunc(((await this.prisma.user.count())/page_size)+1)
     }
   }
 
@@ -31,6 +32,11 @@ class UserService {
     errors["email"] = [];
     errors["phone"] = [];
 
+    // is the name valid?
+    if(!name) {
+      errors["name"].push("not a valid name");
+      hasErrors=true;
+    }
 
     // is the email valid?
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -39,11 +45,18 @@ class UserService {
     }
 
     // is the phone number valid?
-    const parsedNumber=parsePhoneNumber(phone);
-    if(!parsedNumber.isValid()) {
+    try {
+      const parsedNumber=parsePhoneNumber(phone);
+      if(!parsedNumber.isValid()) {
+        errors["phone"].push("not a valid phone number");
+        hasErrors=true;
+      }
+    } catch(error:unknown) {
       errors["phone"].push("not a valid phone number");
-      hasErrors=false;
+      hasErrors=true;
     }
+
+    
 
     if(hasErrors)
       return {"errors": errors}
@@ -65,18 +78,14 @@ class UserService {
       // are there any duplicate records?
       if(error instanceof Prisma.PrismaClientKnownRequestError && error.code == "P2002") {
         errors["general"].push("A user with the same name, email or phone number already exists");
-      }
-
-      // other database errors
-      if(error instanceof Prisma.PrismaClientKnownRequestError || error instanceof Prisma.PrismaClientUnknownRequestError) {
+      } else if(error instanceof Prisma.PrismaClientKnownRequestError || error instanceof Prisma.PrismaClientUnknownRequestError) {
         errors["general"].push("we had some issue with the database, please try again");
+      } else {
+        errors["general"].push("Unknown error, please report this to the administrator");
       }
-
-      // all other errors
-      errors["general"].push("Unknown error, please report this to the administrator");
     }
 
-    return {"error":errors};
+    return {"errors":errors};
   };
 
   deleteUser = async (id: number) => {

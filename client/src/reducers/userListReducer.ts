@@ -4,7 +4,7 @@ import { User, UserListResponse, UserAddResponse, UserDeleteResponse } from '../
 
 interface UserListState {
   page: number,
-  count: number,
+  total_pages: number,
   users: User[],
   errors: {[id: string]: string[]}
   loading: boolean
@@ -12,7 +12,7 @@ interface UserListState {
 
 const initialState: UserListState = {
   page: 1,
-  count: 0,
+  total_pages: 1,
   users: [],
   errors: {},
   loading: false
@@ -38,6 +38,8 @@ const userListSlice:Slice<UserListState> = createSlice({
         state.loading = false;
         if(action.payload.users)
           state.users = action.payload.users;
+        if(action.payload.pages)
+          state.total_pages = action.payload.pages;
       })
       .addCase(getUserListPage.rejected, (state, action) => {
         state.loading = false
@@ -47,6 +49,7 @@ const userListSlice:Slice<UserListState> = createSlice({
     builder
       .addCase(addUser.pending, (state) => {
         state.loading = true
+        state.errors = {}
       })
       .addCase(addUser.fulfilled, (state, action: PayloadAction<UserAddResponse>) => {
         state.loading = false;

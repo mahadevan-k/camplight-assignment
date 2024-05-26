@@ -13,6 +13,7 @@ export interface User {
 
 export interface UserListResponse {
   users?: User[],
+  pages?: number,
   errors?: {[id: string]: string[]},
 }
 

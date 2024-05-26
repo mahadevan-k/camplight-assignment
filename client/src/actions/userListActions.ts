@@ -39,7 +39,7 @@ export const deleteUser = createAsyncThunk<UserDeleteResponse,number,{rejectValu
   'userList/deleteUser',
   async (user_id: number, { rejectWithValue }) => {
     try {
-      const response = await api.delete<UserAddResponse>('/api/users/${user_id}');
+      const response = await api.delete<UserAddResponse>(`/api/users/${user_id}`);
       return { id: user_id }
     } catch(error: any) {
       if(error.response && error.response.status >=400) {
